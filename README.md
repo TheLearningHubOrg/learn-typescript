@@ -1121,7 +1121,305 @@ TypeScript is a statically typed syntactic superset of JavaScript developed by M
 - `any` disables all type checking, permitting arbitrary property access and operations without compile-time warnings.
 - `unknown` is the type-safe counterpart of `any`. Any value can be assigned to `unknown`, but no properties or operations can be performed on it without narrowing the type first (via `typeof`, `instanceof`, etc.).
 
-#### 4. What is the `never` type?
+##
+---
+
+## 3.5 The Complete TypeScript Utility Types Encyclopedia
+
+TypeScript provides built-in type transformations to manipulate types cleanly. Below is an exhaustive reference with both **real-world production usage** and **how each type is implemented from scratch** under the hood.
+
+```mermaid
+flowchart TD
+    TypeT["Original Interface T"] --> Mapped["Mapped Transformations"]
+    Mapped --> Partial["Partial<T> (All optional)"]
+    Mapped --> Required["Required<T> (All mandatory)"]
+    Mapped --> Readonly["Readonly<T> (Immutable)"]
+    Mapped --> Pick["Pick<T, K> (Subset of keys)"]
+    Mapped --> Omit["Omit<T, K> (Exclude keys)"]
+    TypeT --> Conditional["Conditional & Infer Types"]
+    Conditional --> ReturnType["ReturnType<F> (Extract function return)"]
+    Conditional --> Parameters["Parameters<F> (Extract args tuple)"]
+    Conditional --> Awaited["Awaited<P> (Unwrap Promise)"]
+```
+
+### 3.5.1 `Partial<T>` & `Required<T>`
+Makes all properties optional or mandatory:
+
+```typescript
+interface UserProfile {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  bio?: string;
+}
+
+// 1. Usage: Updating a profile only requires a subset of fields
+function updateUser(id: string, updates: Partial<UserProfile>): void {
+  console.log(`Updating user ${id} with:`, updates);
+}
+
+updateUser('101', { bio: 'Full-stack TypeScript developer' }); // Valid!
+
+// 2. Usage: Ensuring all optional fields are populated for analytics
+type CompleteUserProfile = Required<UserProfile>;
+
+// Under the hood implementation:
+type MyPartial<T> = {
+  [P in keyof T]?: T[P];
+};
+
+type MyRequired<T> = {
+  [P in keyof T]-?: T[P]; // The '-?' removes optionality!
+};
+```
+
+---
+
+### 3.5.2 `Readonly<T>` & Deep Immutability
+Prevents reassigning object properties:
+
+```typescript
+interface DatabaseConfig {
+  host: string;
+  port: number;
+}
+
+const config: Readonly<DatabaseConfig> = {
+  host: 'localhost',
+  port: 5432
+};
+
+// config.port = 3306; // Error: Cannot assign to 'port' because it is a read-only property.
+
+// Under the hood implementation:
+type MyReadonly<T> = {
+  readonly [P in keyof T]: T[P];
+};
+
+// Deep Readonly (Recursive transformation)
+type DeepReadonly<T> = T extends Function | boolean | number | string | null | undefined
+  ? T
+  : T extends Array<infer U>
+  ? ReadonlyArray<DeepReadonly<U>>
+  : { readonly [P in keyof T]: DeepReadonly<T[P]> };
+```
+
+---
+
+### 3.5.3 `Pick<T, K>` vs `Omit<T, K>`
+Constructs types by selecting or removing specific property keys:
+
+```typescript
+interface Product {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  costPrice: number; // Internal secret!
+  supplierId: string;
+}
+
+// Public view picks only safe client fields
+type PublicProductView = Pick<Product, 'id' | 'title' | 'description' | 'price'>;
+
+// Internal DTO omits cost price
+type SafeProductDto = Omit<Product, 'costPrice'>;
+
+// Under the hood implementation:
+type MyPick<T, K extends keyof T> = {
+  [P in K]: T[P];
+};
+
+type MyOmit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+```
+
+---
+
+### 3.5.4 `Exclude<T, U>` vs `Extract<T, U>`
+Filters union types:
+
+```typescript
+type SupportedProtocols = 'http' | 'https' | 'ftp' | 'ws' | 'wss';
+type SecureProtocols = 'https' | 'wss';
+
+// Exclude: Remove secure protocols from supported protocols
+type InsecureProtocols = Exclude<SupportedProtocols, SecureProtocols>; // 'http' | 'ftp' | 'ws'
+
+// Extract: Pick only overlapping types
+type OnlySecure = Extract<SupportedProtocols, SecureProtocols>; // 'https' | 'wss'
+
+// Under the hood implementation (Distributive Conditional Types):
+type MyExclude<T, U> = T extends U ? never : T;
+type MyExtract<T, U> = T extends U ? T : never;
+```
+
+---
+
+### 3.5.5 `ReturnType<T>` & `Parameters<T>`
+Extracts types from existing functions without duplicate type declarations:
+
+```typescript
+async function fetchUserOrders(userId: string, limit: number = 10) {
+  return [
+    { orderId: 'ord_1', total: 150.0 },
+    { orderId: 'ord_2', total: 89.50 }
+  ];
+}
+
+// Extract function return type
+type UserOrdersResult = Awaited<ReturnType<typeof fetchUserOrders>>;
+// Array<{ orderId: string, total: number }>
+
+// Extract function parameters as a tuple
+type FetchOrderArgs = Parameters<typeof fetchUserOrders>;
+// [userId: string, limit?: number]
+
+// Under the hood implementation using `infer`:
+type MyReturnType<T extends (...args: any) => any> = T extends (...args: any) => infer R ? R : any;
+type MyParameters<T extends (...args: any) => any> = T extends (...args: infer P) => any ? P : never;
+```
+
+---
+
+### 3.5.6 `Awaited<T>`: Recursive Promise Unwrapping
+```typescript
+type P1 = Promise<string>;
+type R1 = Awaited<P1>; // string
+
+type P2 = Promise<Promise<number>>;
+type R2 = Awaited<P2>; // number (Recursively unwrapped!)
+
+// Under the hood implementation:
+type MyAwaited<T> = T extends null | undefined
+  ? T
+  : T extends object & { then(onfulfilled: infer F, ...args: any): any }
+  ? F extends (value: infer V, ...args: any) => any
+    ? MyAwaited<V>
+    : never
+  : T;
+```
+
+---
+
+## 4.5 Advanced Type Gymnastics: Template Literals & Branded Types
+
+### 4.5.1 Template Literal Types
+Allows building string types with compile-time pattern verification:
+
+```typescript
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type ApiEndpoint = `/api/v1/${string}`;
+
+type Route = `${HttpMethod} ${ApiEndpoint}`;
+
+const validRoute: Route = 'POST /api/v1/users'; // Valid!
+// const invalidRoute: Route = 'PATCH /users';   // Error: Type is not assignable!
+
+// Event Listener Pattern with Capitalization
+type EventType = 'click' | 'change' | 'hover';
+type EventHandlerName = `on${Capitalize<EventType>}`; // 'onClick' | 'onChange' | 'onHover'
+```
+
+---
+
+### 4.5.2 Nominal / Branded Types (Zero Runtime Overhead Type Safety)
+In standard TypeScript, strings are structurally compatible (`email = userId` compiles without warning). Branded types enforce strict type identity at compile time:
+
+```typescript
+declare const __brand: unique symbol;
+type Brand<T, B> = T & { readonly [__brand]: B };
+
+export type UserId = Brand<string, 'UserId'>;
+export type OrderId = Brand<string, 'OrderId'>;
+
+// Type assertion factories with runtime validation
+export function toUserId(id: string): UserId {
+  if (!id.startsWith('usr_')) throw new Error('Invalid UserId format');
+  return id as UserId;
+}
+
+export function toOrderId(id: string): OrderId {
+  if (!id.startsWith('ord_')) throw new Error('Invalid OrderId format');
+  return id as OrderId;
+}
+
+function processOrder(userId: UserId, orderId: OrderId) {
+  console.log(`Processing order ${orderId} for user ${userId}`);
+}
+
+const user = toUserId('usr_123');
+const order = toOrderId('ord_999');
+
+processOrder(user, order); // Valid!
+// processOrder(order, user); // Compile Error: Type 'OrderId' is not assignable to type 'UserId'!
+```
+
+---
+
+### 4.5.3 TypeScript 5+ Stage 3 Decorators
+Modern TypeScript 5 implements the official TC39 Stage 3 Decorators standard:
+
+```typescript
+// Method Performance Benchmark Decorator
+function timing() {
+  return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const originalMethod = descriptor.value;
+
+    descriptor.value = async function (...args: any[]) {
+      const start = performance.now();
+      const result = await originalMethod.apply(this, args);
+      const duration = performance.now() - start;
+      console.log(`[Timing: ${propertyKey}] took ${duration.toFixed(2)}ms`);
+      return result;
+    };
+
+    return descriptor;
+  };
+}
+
+class PaymentService {
+  @timing()
+  async executeCharge(amount: number) {
+    await new Promise(r => setTimeout(r, 100)); // Simulate payment gateway
+    return { status: 'PAID', amount };
+  }
+}
+```
+
+---
+
+### 4.5.4 Declaration Merging & Global Module Augmentation
+Extend existing third-party library types safely:
+
+```typescript
+// Augmenting Express Request with authenticated user session
+import 'express';
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: {
+      id: string;
+      email: string;
+      roles: string[];
+    };
+    correlationId: string;
+  }
+}
+
+// Augmenting Global Window object
+declare global {
+  interface Window {
+    dataLayer: any[];
+    analyticsConfig: {
+      apiKey: string;
+      environment: string;
+    };
+  }
+}
+```
+
+
+## 4. What is the `never` type?
 `never` represents the type of values that never occur. It represents functions that never return (such as infinite loops or functions that unconditionally throw errors) and unreachable conditional branches in exhaustive type checks.
 
 #### 5. What is the difference between an `interface` and a `type` alias?
