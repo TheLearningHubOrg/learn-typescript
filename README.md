@@ -29,6 +29,7 @@ An exhaustive, battle-tested, enterprise-grade curriculum and reference manual f
    - [What is TypeScript?](#what-is-typescript)
    - [Why TypeScript in Modern Software Engineering?](#why-typescript)
    - [The Type Erasure Model & Structural Typing](#the-type-erasure-model)
+   - [Further Reading](#further-reading)
 2. [Getting Started & Tooling Setup](#-getting-started)
    - [Prerequisites](#prerequisites)
    - [Quick Start Installation](#quick-start-installation)
@@ -151,6 +152,12 @@ TypeScript Source File (.ts)
 
 > [!NOTE]
 > Types have zero runtime overhead! Types do not exist in the compiled JavaScript bundle. At runtime, performance is 100% equivalent to native JavaScript.
+
+---
+
+### Further Reading
+
+- [The Concise TypeScript Book](https://github.com/gibbok/typescript-book) - A free and open-source book covering TypeScript fundamentals through advanced concepts.
 
 ---
 
