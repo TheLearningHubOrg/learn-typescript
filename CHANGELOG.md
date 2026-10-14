@@ -1,3 +1,12 @@
+# [2.2.0](https://github.com/manthanank/learn-typescript/compare/v2.1.0...v2.2.0) (2026-10-14)
+
+
+### Features
+
+* standardize TypeScript masterclass to unified 7-stage curriculum format ([b75390f](https://github.com/manthanank/learn-typescript/commit/b75390f9338e86f097310917a7c4023b90502b55))
+
+
+
 # [2.1.0](https://github.com/manthanank/learn-typescript/compare/v1.3.0...v2.1.0) (2026-09-04)
 
 
