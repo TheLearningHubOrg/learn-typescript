@@ -3,109 +3,83 @@
 <div align="center">
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker Image CI](https://github.com/manthanank/learn-typescript/actions/workflows/docker.yml/badge.svg)](https://github.com/manthanank/learn-typescript/actions/workflows/docker.yml)
-[![Releases](https://github.com/manthanank/learn-typescript/actions/workflows/releases.yml/badge.svg)](https://github.com/manthanank/learn-typescript/actions/workflows/releases.yml)
+[![Docker Image CI](https://github.com/TheLearningHubOrg/learn-typescript/actions/workflows/docker.yml/badge.svg)](https://github.com/TheLearningHubOrg/learn-typescript/actions/workflows/docker.yml)
+[![Releases](https://github.com/TheLearningHubOrg/learn-typescript/actions/workflows/releases.yml/badge.svg)](https://github.com/TheLearningHubOrg/learn-typescript/actions/workflows/releases.yml)
 [![TypeScript Version](https://img.shields.io/badge/TypeScript-5.7+-blue.svg?logo=typescript)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-green.svg?logo=node.js)](https://nodejs.org/)
 [![Tested with Vitest](https://img.shields.io/badge/Tested%20with-Vitest-yellow.svg?logo=vitest)](https://vitest.dev/)
+[![Production Ready](https://img.shields.io/badge/Status-Enterprise%20Grade-brightgreen.svg)](https://github.com/TheLearningHubOrg/learn-typescript)
 
 An exhaustive, battle-tested, enterprise-grade curriculum and reference manual for mastering **TypeScript 5.x**, modern type theory, advanced metaprogramming, compiler architecture, and industrial design patterns.
 
-[Getting Started](#-getting-started) • [Compiler & tsconfig.json](#-the-typescript-compiler--tsconfigjson-mastery) • [Generics Deep Dive](#-generics-deep-dive) • [Advanced Metaprogramming](#-advanced-type-system--metaprogramming) • [Interview Questions](#-typescript-interview-questions--answers) • [Cheat Sheet](#-comprehensive-cheat-sheet)
+[Stage 1: Tooling](#1-stage-1-absolute-beginner-foundations--tooling) • [Stage 2: Types & Contracts](#2-stage-2-core-type-primitives-objects--interfaces) • [Stage 3: Generics & Utilities](#3-stage-3-generics--utility-types-deep-dive) • [Stage 4: Metaprogramming](#4-stage-4-advanced-type-gymnastics--metaprogramming) • [Stage 5: CFA & Decorators](#5-stage-5-control-flow-analysis-modules--decorators) • [Stage 6: Architecture](#6-stage-6-enterprise-architecture--design-patterns) • [Stage 7: Staff Handbook](#7-stage-7-staff-typescript-architect-interview-handbook--cheatsheet)
 
 <br/>
 
 <a href="https://www.buymeacoffee.com/manthanank">
-  <img src="public/bmc-button.svg" alt="Buy Me A Coffee" width="180">
+  <img src="https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Donate-yellow?style=for-the-badge&logo=buy-me-a-coffee" alt="Buy Me A Coffee" width="180">
 </a>
 
 </div>
 
 ---
 
-## 📋 Table of Contents
+## 🗺️ 7-Stage Pedagogical Roadmap
 
-1. [Introduction & Philosophy](#-introduction--philosophy)
-   - [What is TypeScript?](#what-is-typescript)
-   - [Why TypeScript in Modern Software Engineering?](#why-typescript)
-   - [The Type Erasure Model & Structural Typing](#the-type-erasure-model)
-2. [Getting Started & Tooling Setup](#-getting-started)
-   - [Prerequisites](#prerequisites)
-   - [Quick Start Installation](#quick-start-installation)
-   - [Directory Structure & Architecture](#directory-structure)
-   - [Scripts & Development Workflow](#scripts--development-workflow)
-3. [The TypeScript Compiler & tsconfig.json Mastery](#-the-typescript-compiler--tsconfigjson-mastery)
-   - [Compiler Phases (Parser, Binder, Type Checker, Emitter)](#compiler-phases)
-   - [Strict Mode Flags Deep Dive (noImplicitAny, strictNullChecks, etc.)](#strict-mode-flags)
-   - [Module & Target Evolution (NodeNext, ES2022, bundler)](#module-resolution-and-targets)
-   - [Project References & Incremental Compilation](#project-references)
-4. [Primitive & Fundamental Types](#-primitive--fundamental-types)
-   - [Primitives: number, string, boolean, bigint, symbol](#primitives)
-   - [Top & Bottom Types: any vs unknown vs never vs void](#top-and-bottom-types)
-   - [Literal Types & Const Assertions (as const)](#literal-types--const-assertions)
-   - [Tuples & Readonly Arrays](#tuples--readonly-arrays)
-5. [Objects, Interfaces & Classes](#-objects-interfaces--classes)
-   - [Interfaces vs Type Aliases: Architectural Trade-offs](#interfaces-vs-type-aliases)
-   - [Structural Subtyping & Excess Property Checks](#structural-subtyping)
-   - [Classes: Access Modifiers, Parameter Properties & Getters/Setters](#classes-in-depth)
-   - [Abstract Classes & Polymorphic Contracts](#abstract-classes)
-   - [Index Signatures & Record Structures](#index-signatures)
-6. [Functions & Call Signatures](#-functions--call-signatures)
-   - [Function Types & Call Signatures](#function-types)
-   - [Function Overloads in Modern TS](#function-overloads)
-   - [Rest Parameters & Tuple Arguments](#rest-parameters)
-   - [Typing this Contexts](#typing-this-contexts)
-7. [Generics Deep Dive](#-generics-deep-dive)
-   - [Generic Functions, Interfaces & Classes](#generic-primitives)
-   - [Generic Constraints with extends](#generic-constraints)
-   - [The keyof Operator & Property Constraints](#keyof-operator)
-   - [TypeScript 5 const Type Parameters](#const-type-parameters)
-   - [Generic Defaults & Variance](#generic-defaults)
-8. [Utility Types in Depth](#-utility-types-in-depth)
-   - [Mutation Utilities: Partial, Required, Readonly](#mutation-utilities)
-   - [Selection Utilities: Pick, Omit, Extract, Exclude](#selection-utilities)
-   - [Type Transformation: Record, NonNullable, Parameters, ReturnType, Awaited](#transformation-utilities)
-   - [Instance Utilities: InstanceType, ConstructorParameters](#instance-utilities)
-9. [Advanced Type System & Metaprogramming](#-advanced-type-system--metaprogramming)
-   - [Mapped Types & Modifier Remapping (+/-, as)](#mapped-types)
-   - [Conditional Types & Distributive Law](#conditional-types)
-   - [Type Inference with infer](#type-inference-with-infer)
-   - [Template Literal Types & String Manipulation](#template-literal-types)
-   - [The satisfies Operator: Exact Literal Preservation](#the-satisfies-operator)
-   - [Recursive Types & Deep Immutability](#recursive-types)
-10. [Type Narrowing, Guards & Control Flow Analysis](#-type-narrowing-guards--control-flow)
-    - [Control Flow Analysis (CFA) Mechanisms](#control-flow-analysis)
-    - [Standard Guards: typeof, instanceof, in](#standard-guards)
-    - [User-Defined Type Predicates (is)](#user-defined-type-predicates)
-    - [Assertion Signatures (asserts)](#assertion-signatures)
-    - [Discriminated Unions & Exhaustiveness Checking with never](#discriminated-unions)
-11. [Modules, Namespaces & Declaration Files](#-modules-namespaces--declaration-files)
-    - [ES Modules vs CommonJS in TypeScript](#es-modules-vs-commonjs)
-    - [Ambient Declarations & .d.ts Files](#ambient-declarations)
-    - [Declaration Merging (Interfaces & Namespaces)](#declaration-merging)
-    - [Triple-Slash Directives](#triple-slash-directives)
-12. [Modern Decorators (Stage 3 in TS 5)](#-modern-decorators-stage-3)
-    - [Class Decorators](#class-decorators)
-    - [Method & Accessor Decorators](#method-decorators)
-    - [Field & Parameter Decorators](#field-decorators)
-13. [Testing & Quality Assurance](#-testing--quality-assurance)
-    - [Unit Testing Types with Vitest](#unit-testing-with-vitest)
-    - [Type-Level Testing (expectTypeOf, assertType)](#type-level-testing)
-14. [Real-World Architectural Patterns](#-real-world-architectural-patterns)
-    - [Pattern 1: Strongly-Typed Result / Either Pattern](#pattern-1-result-either)
-    - [Pattern 2: Fully-Typed Event Bus](#pattern-2-typed-event-bus)
-    - [Pattern 3: Strongly-Typed REST API Client](#pattern-3-rest-client)
-15. [TypeScript Interview Questions & Answers](#-typescript-interview-questions--answers)
-    - [Beginner Questions (1-10)](#beginner-questions)
-    - [Intermediate Questions (11-25)](#intermediate-questions)
-    - [Senior & Architectural Questions (26-40)](#senior--architectural-questions)
-16. [Comprehensive Cheat Sheet](#-comprehensive-cheat-sheet)
-    - [Syntax Quick Reference](#syntax-quick-reference)
-    - [Essential tsconfig.json Presets](#essential-tsconfigjson-presets)
-17. [Community & Contributing](#-community--contributing)
-18. [Author & Sponsorship](#-author--sponsorship)
+```mermaid
+flowchart LR
+    S1["Stage 1: Tooling & Compiler"] --> S2["Stage 2: Types & Contracts"]
+    S2 --> S3["Stage 3: Generics & Utilities"]
+    S3 --> S4["Stage 4: Metaprogramming"]
+    S4 --> S5["Stage 5: CFA & Decorators"]
+    S5 --> S6["Stage 6: Architecture & Testing"]
+    S6 --> S7["Stage 7: Staff Architect Handbook"]
+```
+
+| Stage | Focus Domain | Core Concepts & Production Outcomes |
+| :--- | :--- | :--- |
+| **Stage 1** | **Absolute Beginner Foundations & Tooling** | Type erasure model, structural typing, `tsc` compiler phases (parser, binder, checker, emitter), strict mode flags, project references. |
+| **Stage 2** | **Core Type Primitives, Objects & Interfaces** | Primitives, top/bottom types (`any`, `unknown`, `never`, `void`), `as const`, interfaces vs type aliases, excess property checks, modern classes. |
+| **Stage 3** | **Generics & Utility Types Deep Dive** | Generic constraints (`extends`), `keyof`, TS 5 `const` type parameters, variance, utility types (`Partial`, `Pick`, `Omit`, `Awaited`, etc.). |
+| **Stage 4** | **Advanced Type Gymnastics & Metaprogramming** | Mapped types with key remapping (`as`), distributive conditional types, `infer` type inference, template literals, `satisfies`, branded types. |
+| **Stage 5** | **Control Flow Analysis, Modules & Decorators** | CFA engine, type predicates (`is`), assertion signatures (`asserts`), discriminated unions, ambient `.d.ts`, ESM/CJS, Stage 3 Decorators. |
+| **Stage 6** | **Enterprise Architecture & Design Patterns** | Strongly-typed Result/Either, typed EventBus, typed REST client, type-level testing with Vitest (`expectTypeOf`, `assertType`). |
+| **Stage 7** | **Staff TypeScript Architect Interview Handbook** | 40 staff-level interview scenarios, utility types encyclopedia, essential tsconfig presets, production cheatsheet. |
 
 ---
+
+## 📋 Table of Contents
+
+- [1. Stage 1: Absolute Beginner Foundations & Tooling](#1-stage-1-absolute-beginner-foundations--tooling)
+  - [1.1 Introduction & Philosophy](#-introduction--philosophy)
+  - [1.2 Getting Started & Tooling Setup](#-getting-started)
+  - [1.3 The TypeScript Compiler & tsconfig.json Mastery](#-the-typescript-compiler--tsconfigjson-mastery)
+- [2. Stage 2: Core Type Primitives, Objects & Interfaces](#2-stage-2-core-type-primitives-objects--interfaces)
+  - [2.1 Primitive & Fundamental Types](#-primitive--fundamental-types)
+  - [2.2 Objects, Interfaces & Classes](#-objects-interfaces--classes)
+  - [2.3 Functions & Call Signatures](#-functions--call-signatures)
+- [3. Stage 3: Generics & Utility Types Deep Dive](#3-stage-3-generics--utility-types-deep-dive)
+  - [3.1 Generics Deep Dive & Constraints](#-generics-deep-dive)
+  - [3.2 Utility Types in Depth](#-utility-types-in-depth)
+- [4. Stage 4: Advanced Type Gymnastics & Metaprogramming](#4-stage-4-advanced-type-gymnastics--metaprogramming)
+  - [4.1 Advanced Type System & Metaprogramming](#-advanced-type-system--metaprogramming)
+  - [4.2 Template Literals & Branded Types](#45-advanced-type-gymnastics-template-literals--branded-types)
+- [5. Stage 5: Control Flow Analysis, Modules & Decorators](#5-stage-5-control-flow-analysis-modules--decorators)
+  - [5.1 Type Narrowing, Guards & Control Flow Analysis](#-type-narrowing-guards--control-flow)
+  - [5.2 Modules, Namespaces & Declaration Files](#-modules-namespaces--declaration-files)
+  - [5.3 Modern Decorators (Stage 3 in TS 5)](#-modern-decorators-stage-3)
+- [6. Stage 6: Enterprise Architecture & Design Patterns](#6-stage-6-enterprise-architecture--design-patterns)
+  - [6.1 Real-World Architectural Patterns](#-real-world-architectural-patterns)
+- [7. Stage 7: Staff TypeScript Architect Interview Handbook & Cheatsheet](#7-stage-7-staff-typescript-architect-interview-handbook--cheatsheet)
+  - [7.1 TypeScript Interview Questions & Answers (40 Q&As)](#-typescript-interview-questions--answers)
+  - [7.2 Complete Utility Types Encyclopedia](#35-the-complete-typescript-utility-types-encyclopedia)
+  - [7.3 Comprehensive Cheat Sheet & tsconfig Presets](#-comprehensive-cheat-sheet)
+- [🤝 Community & Contributing](#-community--contributing)
+- [📄 Author & Sponsorship](#-author--sponsorship)
+
+---
+
+## 1. Stage 1: Absolute Beginner Foundations & Tooling
 
 ## 🌟 Introduction & Philosophy
 
@@ -174,7 +148,7 @@ Clone the repository and install all dependencies:
 
 ```bash
 # Clone the repository
-git clone https://github.com/manthanank/learn-typescript.git
+git clone https://github.com/TheLearningHubOrg/learn-typescript.git
 
 # Navigate into the project directory
 cd learn-typescript
@@ -274,6 +248,10 @@ Enabling `"strict": true` activates a family of fundamental compiler flags that 
 }
 ```
 
+
+---
+
+## 2. Stage 2: Core Type Primitives, Objects & Interfaces
 
 ## 🧱 Primitive & Fundamental Types
 
@@ -494,6 +472,10 @@ const deck: CardDeck = {
 ```
 
 
+---
+
+## 3. Stage 3: Generics & Utility Types Deep Dive
+
 ## 🧬 Generics Deep Dive
 
 Generics enable writing reusable, componentized functions, classes, and interfaces that work across a variety of types while preserving complete type safety.
@@ -660,6 +642,10 @@ type ResolvedData = Awaited<AsyncData>; // string[]
 ```
 
 
+---
+
+## 4. Stage 4: Advanced Type Gymnastics & Metaprogramming
+
 ## 🔮 Advanced Type System & Metaprogramming
 
 ### Mapped Types & Key Remapping
@@ -808,6 +794,10 @@ type LockedConfig = DeepReadonly<Config>;
 // lockedConfig.server.ssl.cert = 'new'; // ❌ Error: Cannot assign to 'cert' because it is a read-only property.
 ```
 
+
+---
+
+## 5. Stage 5: Control Flow Analysis, Modules & Decorators
 
 ## 🎯 Type Narrowing, Guards & Control Flow Analysis
 
@@ -1029,6 +1019,10 @@ processor.processTransaction(250, 'USD');
 
 ---
 
+---
+
+## 6. Stage 6: Enterprise Architecture & Design Patterns
+
 ## 🏗️ Real-World Architectural Patterns
 
 ### Pattern 1: Strongly-Typed Result / Either Pattern
@@ -1106,6 +1100,10 @@ bus.on('user:registered', (data) => {
 bus.emit('user:registered', { userId: '123', email: 'user@example.com' });
 ```
 
+
+---
+
+## 7. Stage 7: Staff TypeScript Architect Interview Handbook & Cheatsheet
 
 ## 🎯 TypeScript Interview Questions & Answers
 
@@ -1581,7 +1579,7 @@ const config = {
 
 Contributions, issues, and feature requests are welcome!
 
-1. Fork the Project (`https://github.com/manthanank/learn-typescript/fork`)
+1. Fork the Project (`https://github.com/TheLearningHubOrg/learn-typescript/fork`)
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
